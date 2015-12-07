@@ -1,5 +1,5 @@
 # Forgelin
-_Kotlin support for Minecraft Forge 1.8-11.14.1.1371 or above_
+_Kotlin support for Minecraft Forge 1.7.10-10.13.4.1564 or above_
 
 [![Build Status](https://drone.io/github.com/Emberwalker/Forgelin/status.png)](https://drone.io/github.com/Emberwalker/Forgelin/latest)
 
