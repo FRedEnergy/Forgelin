@@ -1,6 +1,7 @@
 package io.drakon.forgelin;
 
-import net.minecraftforge.fml.relauncher.IFMLCallHook;
+
+import cpw.mods.fml.relauncher.IFMLCallHook;
 
 import java.util.Map;
 

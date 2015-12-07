@@ -1,15 +1,12 @@
 package io.drakon.forgelin
 
-import net.minecraftforge.fml.common.*
-import net.minecraftforge.fml.common.Mod.EventHandler
-import net.minecraftforge.fml.relauncher.Side
+import cpw.mods.fml.common.FMLModContainer
+import cpw.mods.fml.common.ILanguageAdapter
+import cpw.mods.fml.common.ModContainer
+import cpw.mods.fml.relauncher.Side
 import org.apache.logging.log4j.LogManager
-
 import java.lang.reflect.Field
 import java.lang.reflect.Method
-import java.util.Locale
-import kotlin.reflect.KClass
-import kotlin.reflect.jvm.kotlin
 
 /**
  * Kotlin implementation of FML's ILanguageAdapter.

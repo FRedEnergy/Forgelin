@@ -1,6 +1,7 @@
 package io.drakon.forgelin;
 
-import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+
+import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
 import java.util.Map;
 

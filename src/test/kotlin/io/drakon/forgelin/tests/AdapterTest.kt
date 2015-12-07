@@ -1,36 +1,35 @@
 package io.drakon.forgelin.tests
 
+import cpw.mods.fml.common.SidedProxy
 import io.drakon.forgelin.KotlinAdapter
 import io.drakon.forgelin.tests.dummy.Proxy
 import io.drakon.forgelin.tests.dummy.ProxyClient
 import io.drakon.forgelin.tests.dummy.ProxyServer
-import net.minecraftforge.fml.common.SidedProxy
-import kotlin.platform.platformStatic
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import org.junit.After as post
-import org.junit.Before as pre
-import org.junit.Test as test
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 
 public class AdapterTest {
 
     val adapter: KotlinAdapter = KotlinAdapter()
 
-    pre fun setup() {}
+    @Before fun setup() {}
 
-    test fun testNewInstanceObject() {
+    @Test fun testNewInstanceObject() {
         val inst = adapter.getNewInstance(null, TestObject.javaClass, ClassLoader.getSystemClassLoader(), null)
         assertEquals(inst, TestObject)
     }
 
-    test fun testNewInstanceClass() {
+    @Test fun testNewInstanceClass() {
         val inst = adapter.getNewInstance(null, javaClass<TestClass>(), ClassLoader.getSystemClassLoader(), null)
         assertTrue(inst is TestClass)
     }
 
-    test fun testSetInternalProxies() {} // NOOP
+    @Test fun testSetInternalProxies() {} // NOOP
 
-    test fun testSetProxyObject() {
+    @Test fun testSetProxyObject() {
         val f = TestObject.javaClass.getField("proxy")
 
         adapter.setProxy(f, TestObject.javaClass, ProxyClient())
@@ -40,7 +39,7 @@ public class AdapterTest {
         assert(TestObject.proxy is ProxyServer)
     }
 
-    test fun testSetProxyClass() {
+    @Test fun testSetProxyClass() {
         // For whatever reason calling 'javaClass' gets us the internal companion class, instead of the class itself
         val clazz = javaClass<TestClass>()
         val f = clazz.getField("proxy")
@@ -52,17 +51,15 @@ public class AdapterTest {
         assert(TestClass.proxy is ProxyServer)
     }
 
-    post fun teardown() {}
+    @After fun teardown() {}
 
     public object TestObject {
-        SidedProxy(clientSide = "io.drakon.forgelin.tests.dummy.ProxyClient", serverSide = "io.drakon.forgelin.tests.dummy.ProxyServer")
+        @SidedProxy(clientSide = "io.drakon.forgelin.tests.dummy.ProxyClient", serverSide = "io.drakon.forgelin.tests.dummy.ProxyServer")
         public var proxy: Proxy? = null
     }
 
-    public class TestClass {
-        companion object {
-            SidedProxy(clientSide = "io.drakon.forgelin.tests.dummy.ProxyClient", serverSide = "io.drakon.forgelin.tests.dummy.ProxyServer")
-            public platformStatic var proxy: Proxy? = null
-        }
+    public object TestClass {
+        @SidedProxy(clientSide = "io.drakon.forgelin.tests.dummy.ProxyClient", serverSide = "io.drakon.forgelin.tests.dummy.ProxyServer")
+        @JvmStatic public var proxy: Proxy? = null
     }
 }
