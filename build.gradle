@@ -54,7 +54,10 @@ configurations {
 
 dependencies {
     shade "org.jetbrains.kotlin:kotlin-stdlib:${kotlin_ver}"
+    
     shade "org.jetbrains.kotlin:kotlin-reflect:${kotlin_ver}"
+
+    shade "org.jetbrains.kotlin:kotlin-runtime:${kotlin_ver}"
     testCompile "junit:junit:4.+"
 }
 
@@ -65,6 +68,7 @@ minecraft {
     replace '@VERSION@', mod_version
     replace '@KOTLIN@', kotlin_ver
 
+    //srgExtra "PK: kotlin io/drakon/forgelin/repack/"
     // Note: Despite shading Kotlin, we _don't_ repackage it - this lets other mods use it, and saves us downloading libraries at runtime (ewh)
 }
 
