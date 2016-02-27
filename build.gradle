@@ -6,12 +6,13 @@
 // Pre-execute
 
 buildscript {
+    ext.kotlin_version = '1.0.0'
     ext {
         // ==[ Variables ]========================
         mc_ver = '1.7.10'
         forge_ver = '10.13.4.1564-1.7.10'
-        kotlin_ver = '1.0.0-beta-2423'
-        mod_version = '0.1.0'
+        kotlin_ver = '1.0.0'
+        mod_version = '0.1.1'
         // =======================================
     }
     repositories {
@@ -29,6 +30,7 @@ buildscript {
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_ver}"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
@@ -59,6 +61,7 @@ dependencies {
 
     shade "org.jetbrains.kotlin:kotlin-runtime:${kotlin_ver}"
     testCompile "junit:junit:4.+"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
 // Setup Forge plugin
@@ -134,4 +137,7 @@ jar {
     manifest {
         from droneManifest, verManifest, fmlManifest
     }
+}
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
 }

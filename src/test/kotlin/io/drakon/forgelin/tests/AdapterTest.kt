@@ -5,13 +5,12 @@ import io.drakon.forgelin.KotlinAdapter
 import io.drakon.forgelin.tests.dummy.Proxy
 import io.drakon.forgelin.tests.dummy.ProxyClient
 import io.drakon.forgelin.tests.dummy.ProxyServer
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.Assert.*
 
-public class AdapterTest {
+class AdapterTest {
 
     val adapter: KotlinAdapter = KotlinAdapter()
 
@@ -23,7 +22,7 @@ public class AdapterTest {
     }
 
     @Test fun testNewInstanceClass() {
-        val inst = adapter.getNewInstance(null, javaClass<TestClass>(), ClassLoader.getSystemClassLoader(), null)
+        val inst = adapter.getNewInstance(null, TestClass.javaClass, ClassLoader.getSystemClassLoader(), null)
         assertTrue(inst is TestClass)
     }
 
@@ -40,8 +39,7 @@ public class AdapterTest {
     }
 
     @Test fun testSetProxyClass() {
-        // For whatever reason calling 'javaClass' gets us the internal companion class, instead of the class itself
-        val clazz = javaClass<TestClass>()
+        val clazz = TestClass.javaClass
         val f = clazz.getField("proxy")
 
         adapter.setProxy(f, clazz, ProxyClient())
@@ -53,13 +51,13 @@ public class AdapterTest {
 
     @After fun teardown() {}
 
-    public object TestObject {
+    object TestObject {
         @SidedProxy(clientSide = "io.drakon.forgelin.tests.dummy.ProxyClient", serverSide = "io.drakon.forgelin.tests.dummy.ProxyServer")
-        public var proxy: Proxy? = null
+        @JvmField var proxy: Proxy? = null
     }
 
-    public object TestClass {
+    object TestClass {
         @SidedProxy(clientSide = "io.drakon.forgelin.tests.dummy.ProxyClient", serverSide = "io.drakon.forgelin.tests.dummy.ProxyServer")
-        @JvmStatic public var proxy: Proxy? = null
+        @JvmStatic var proxy: Proxy? = null
     }
 }
