@@ -1,6 +1,7 @@
 package io.drakon.forgelin.debug
 
 import cpw.mods.fml.common.Mod
+import cpw.mods.fml.common.Mod.EventHandler
 import cpw.mods.fml.common.SidedProxy
 import cpw.mods.fml.common.event.FMLInitializationEvent
 import cpw.mods.fml.common.event.FMLPostInitializationEvent
@@ -27,16 +28,19 @@ class ForgelinWorkbenchClass {
     }
 
     @Suppress("UNUSED_PARAMETER")
+    @EventHandler
     fun preinit(evt: FMLPreInitializationEvent) {
         log.info("Preinit.")
     }
 
     @Suppress("UNUSED_PARAMETER")
+    @EventHandler
     fun init(evt: FMLInitializationEvent) {
         log.info("Init.")
     }
 
     @Suppress("UNUSED_PARAMETER")
+    @EventHandler
     fun postinit(evt: FMLPostInitializationEvent) {
         log.info("Postinit.")
     }
