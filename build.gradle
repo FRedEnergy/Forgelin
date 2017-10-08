@@ -54,6 +54,8 @@ configurations {
     compile.extendsFrom shade
 }
 
+group = "io.drakon"
+
 dependencies {
     shade "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     
