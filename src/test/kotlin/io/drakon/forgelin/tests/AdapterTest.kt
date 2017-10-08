@@ -34,18 +34,15 @@ class AdapterTest {
     @Test fun testSetProxyObject() {
         val testObjectClass = TestObject::class
 
-        val clientProxyField = testObjectClass.memberProperties.find {
-            it.name == "clientProxy"
-        }!!.javaField!!
-        val serverProxyField = testObjectClass.memberProperties.find {
-            it.name == "serverProxy"
+        val proxyField = testObjectClass.memberProperties.find {
+            it.name == "proxy"
         }!!.javaField!!
 
-        adapter.setProxy(clientProxyField, testObjectClass.java, ProxyClient())
-        assert(TestObject.clientProxy is ProxyClient)
+        adapter.setProxy(proxyField, testObjectClass.java, ProxyClient())
+        assert(TestObject.proxy is ProxyClient)
 
-        adapter.setProxy(serverProxyField, testObjectClass.java, ProxyServer())
-        assert(TestObject.serverProxy is ProxyServer)
+        adapter.setProxy(proxyField, testObjectClass.java, ProxyServer())
+        assert(TestObject.proxy is ProxyServer)
     }
 
     @Test fun testSetProxyClass() {
@@ -53,18 +50,15 @@ class AdapterTest {
 
         val testClassCompanion = testClass.companionObject!!
 
-        val clientProxyField = testClassCompanion.memberProperties.find {
-            it.name == "clientProxy"
-        }!!.javaField!!
-        val serverProxyField = testClassCompanion.memberProperties.find {
-            it.name == "serverProxy"
+        val proxyField = testClassCompanion.memberProperties.find {
+            it.name == "proxy"
         }!!.javaField!!
 
-        adapter.setProxy(clientProxyField, testClass.java, ProxyClient())
-        assert(TestClass.clientProxy is ProxyClient)
+        adapter.setProxy(proxyField, testClass.java, ProxyClient())
+        assert(TestClass.proxy is ProxyClient)
 
-        adapter.setProxy(serverProxyField, testClass.java, ProxyServer())
-        assert(TestClass.serverProxy is ProxyServer)
+        adapter.setProxy(proxyField, testClass.java, ProxyServer())
+        assert(TestClass.proxy is ProxyServer)
     }
 
     @After fun teardown() {}
@@ -72,23 +66,15 @@ class AdapterTest {
 }
 
 object TestObject {
-    @SidedProxy(clientSide = "io.drakon.forgelin.tests.dummy.ProxyClient")
-    @JvmField
-    var clientProxy: Proxy? = null
-    @SidedProxy(serverSide = "io.drakon.forgelin.tests.dummy.ProxyServer")
-    @JvmField
-    var serverProxy: Proxy? = null
+    @SidedProxy(serverSide = "io.drakon.forgelin.tests.dummy.ProxyServer", clientSide = "io.drakon.forgelin.tests.dummy.ProxyClient")
+    lateinit var proxy: Proxy
 }
 
 class TestClass {
 
     companion object {
-        @SidedProxy(clientSide = "io.drakon.forgelin.tests.dummy.ProxyClient")
-        @JvmField
-        var clientProxy: Proxy? = null
-        @SidedProxy(serverSide = "io.drakon.forgelin.tests.dummy.ProxyServer")
-        @JvmField
-        var serverProxy: Proxy? = null
+        @SidedProxy(serverSide = "io.drakon.forgelin.tests.dummy.ProxyServer", clientSide = "io.drakon.forgelin.tests.dummy.ProxyClient")
+        lateinit var proxy: Proxy
     }
 
 }
