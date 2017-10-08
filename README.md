@@ -101,7 +101,7 @@ ___tl;dr - Use `object`, not `class`. It's better in every way for `@Mod`.___
 
 This question is difficult to answer - for objects/classes outside your main `@Mod` object, use whatever you want. For the `@Mod` though,
 things get a little more awkward. Forgelin is designed mostly to support `object`-style mods, and all the usual FML stuff works
-with them. `class`-style works, ~~ but with one major caveat - ~~`@SidedProxy` does **not** finally work right now due to the lack of statics in
+with them. `class`-style works, ~~but with one major caveat - `@SidedProxy` does **not** finally work right now due to the lack of statics in
 Kotlin itself~~ but you have to define your proxies on a companion object inside the class. Other stuff also might be broken, bug reports welcome!
 
 ## Licenses
