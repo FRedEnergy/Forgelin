@@ -9,55 +9,72 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.Assert.*
+import kotlin.reflect.full.companionObject
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.jvm.javaField
 
 class AdapterTest {
 
-    val adapter: KotlinAdapter = KotlinAdapter()
+    private val adapter: KotlinAdapter = KotlinAdapter()
 
     @Before fun setup() {}
 
     @Test fun testNewInstanceObject() {
-        val inst = adapter.getNewInstance(null, TestObject.javaClass, ClassLoader.getSystemClassLoader(), null)
+        val inst = adapter.getNewInstance(null, TestObject::class.java, ClassLoader.getSystemClassLoader(), null)
         assertEquals(inst, TestObject)
     }
 
     @Test fun testNewInstanceClass() {
-        val inst = adapter.getNewInstance(null, TestClass.javaClass, ClassLoader.getSystemClassLoader(), null)
+        val inst = adapter.getNewInstance(null, TestClass::class.java, ClassLoader.getSystemClassLoader(), null)
         assertTrue(inst is TestClass)
     }
 
     @Test fun testSetInternalProxies() {} // NOOP
 
     @Test fun testSetProxyObject() {
-        val f = TestObject.javaClass.getField("proxy")
+        val testObjectClass = TestObject::class
 
-        adapter.setProxy(f, TestObject.javaClass, ProxyClient())
+        val proxyField = testObjectClass.memberProperties.find {
+            it.name == "proxy"
+        }!!.javaField!!
+
+        adapter.setProxy(proxyField, testObjectClass.java, ProxyClient())
         assert(TestObject.proxy is ProxyClient)
 
-        adapter.setProxy(f, TestObject.javaClass, ProxyServer())
+        adapter.setProxy(proxyField, testObjectClass.java, ProxyServer())
         assert(TestObject.proxy is ProxyServer)
     }
 
     @Test fun testSetProxyClass() {
-        val clazz = TestClass.javaClass
-        val f = clazz.getField("proxy")
+        val testClass = TestClass::class
 
-        adapter.setProxy(f, clazz, ProxyClient())
+        val testClassCompanion = testClass.companionObject!!
+
+        val proxyField = testClassCompanion.memberProperties.find {
+            it.name == "proxy"
+        }!!.javaField!!
+
+        adapter.setProxy(proxyField, testClass.java, ProxyClient())
         assert(TestClass.proxy is ProxyClient)
 
-        adapter.setProxy(f, clazz, ProxyServer())
+        adapter.setProxy(proxyField, testClass.java, ProxyServer())
         assert(TestClass.proxy is ProxyServer)
     }
 
     @After fun teardown() {}
 
-    object TestObject {
-        @SidedProxy(clientSide = "io.drakon.forgelin.tests.dummy.ProxyClient", serverSide = "io.drakon.forgelin.tests.dummy.ProxyServer")
-        @JvmField var proxy: Proxy? = null
+}
+
+object TestObject {
+    @SidedProxy(serverSide = "io.drakon.forgelin.tests.dummy.ProxyServer", clientSide = "io.drakon.forgelin.tests.dummy.ProxyClient")
+    lateinit var proxy: Proxy
+}
+
+class TestClass {
+
+    companion object {
+        @SidedProxy(serverSide = "io.drakon.forgelin.tests.dummy.ProxyServer", clientSide = "io.drakon.forgelin.tests.dummy.ProxyClient")
+        lateinit var proxy: Proxy
     }
 
-    object TestClass {
-        @SidedProxy(clientSide = "io.drakon.forgelin.tests.dummy.ProxyClient", serverSide = "io.drakon.forgelin.tests.dummy.ProxyServer")
-        @JvmStatic var proxy: Proxy? = null
-    }
 }

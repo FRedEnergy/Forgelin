@@ -7,7 +7,7 @@ import org.apache.logging.log4j.LogManager
  *
  * Server-side.
  */
-public class ProxyServer : Proxy {
+class ProxyServer : Proxy {
 
     init {
         LogManager.getLogger().info("Server proxy constructed.")

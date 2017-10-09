@@ -8,4 +8,5 @@ import cpw.mods.fml.common.Mod
  * @author Arkan <arkan@drakon.io>
  */
 @Mod(modid = "Forgelin", name = "Kotlin for Forge", version = "@VERSION@-@KOTLIN@", modLanguageAdapter = "io.drakon.forgelin.KotlinAdapter", acceptableRemoteVersions = "*")
-public object Forgelin {}
+@Suppress("Unused")
+object Forgelin
